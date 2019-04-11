@@ -1,3 +1,4 @@
+const myMath = require("./mathOverride");
 class Location {
     /**
      * @param {String} type          => Type refers to if it is a match or a goal
@@ -31,6 +32,12 @@ class Location {
             "tied": this.result.filter((el) =>  el == 0).length
         } : null;
     }
+    get getWinningStreak() {
+        return this.type == 'goal' && this.result !== undefined ? this.result.slice(Math.max(this.lastIndexOf(0), this.lastIndexOf(-1)) > -1 ? Math.max(this.lastIndexOf(0), this.lastIndexOf(-1)) : 0, this.length).reduce((ac, cv) => ac + cv, 0) : null;
+    }
+    get getTiedWinningStreak() {
+        return this.type == 'goal' && this.result !== undefined ? this.result.slice(this.lastIndexOf(-1) > -1 ? this.lastIndexOf(-1) : 0, this.length).reduce((ac, cv) => ac + cv, 0) : null;
+    }
     get getSumPositive() {
         return this.type == 'goal' && this.result !== undefined ? this.result.reduce((ac, cv) => ac + (cv >= 0 ? cv : 0), 0)  : null;
     }
@@ -41,6 +48,18 @@ class Location {
         return  this.type == 'goal' && this.result !== undefined ? {
             "positive": this.result.reduce((ac, cv) => ac + (cv >= 0 ? cv : 0), 0),
             "negative": this.result.reduce((ac, cv) => ac + (cv <= 0 ? cv : 0), 0)
+        } : null;
+    }
+    get averagePositive() {
+        return  this.type == 'goal' && this.result !== undefined ? myMath.averagePositiveOnlyEven(this.result) : null
+    }
+    get averageNegative() {
+        return  this.type == 'goal' && this.result !== undefined ? myMath.averageNegativeOnlyOdd(this.result) : null
+    }
+    get allAverage() {
+        return  this.type == 'goal' && this.result !== undefined ? {
+            "positive": myMath.averagePositiveOnlyEven(this.result),
+            "negative": myMath.averageNegativeOnlyOdd(this.result)
         } : null;
     }
     addvalue(final) {
