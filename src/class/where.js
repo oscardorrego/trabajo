@@ -1,4 +1,4 @@
-const myMath = require("./mathOverride");
+const myMath = require("../rubbish/mathOverride");
 class Location {
     /**
      * @param {String} type          => Type refers to if it is a match or a goal
@@ -16,6 +16,7 @@ class Location {
     get getResult() {
         return this.result;
     }
+    //Matches Start:
     get getWon() {
         return this.type == 'match' && this.result !== undefined ? this.result.filter((el) =>  el == 1).length : null;
     }
@@ -33,11 +34,12 @@ class Location {
         } : null;
     }
     get getWinningStreak() {
-        return this.type == 'goal' && this.result !== undefined ? this.result.slice(Math.max(this.lastIndexOf(0), this.lastIndexOf(-1)) > -1 ? Math.max(this.lastIndexOf(0), this.lastIndexOf(-1)) : 0, this.length).reduce((ac, cv) => ac + cv, 0) : null;
+        return this.type == 'match' && this.result !== undefined ? this.result.slice(Math.max(this.lastIndexOf(0), this.lastIndexOf(-1)) > -1 ? Math.max(this.lastIndexOf(0), this.lastIndexOf(-1)) : 0, this.length).reduce((ac, cv) => ac + cv, 0) : null;
     }
     get getTiedWinningStreak() {
-        return this.type == 'goal' && this.result !== undefined ? this.result.slice(this.lastIndexOf(-1) > -1 ? this.lastIndexOf(-1) : 0, this.length).reduce((ac, cv) => ac + cv, 0) : null;
+        return this.type == 'match' && this.result !== undefined ? this.result.slice(this.lastIndexOf(-1) > -1 ? this.lastIndexOf(-1) : 0, this.length).reduce((ac, cv) => ac + cv, 0) : null;
     }
+    //Goals start: 
     get getSumPositive() {
         return this.type == 'goal' && this.result !== undefined ? this.result.reduce((ac, cv) => ac + (cv >= 0 ? cv : 0), 0)  : null;
     }
@@ -50,10 +52,10 @@ class Location {
             "negative": this.result.reduce((ac, cv) => ac + (cv <= 0 ? cv : 0), 0)
         } : null;
     }
-    get averagePositive() {
+    get getAveragePositive() {
         return  this.type == 'goal' && this.result !== undefined ? myMath.averagePositiveOnlyEven(this.result) : null
     }
-    get averageNegative() {
+    get getAverageNegative() {
         return  this.type == 'goal' && this.result !== undefined ? myMath.averageNegativeOnlyOdd(this.result) : null
     }
     get allAverage() {
@@ -62,6 +64,7 @@ class Location {
             "negative": myMath.averageNegativeOnlyOdd(this.result)
         } : null;
     }
+    //General methods
     addvalue(final) {
         this.result = this.result != undefined ? this.result.concat(Location.areResultsRight(this.type, final)) : Location.areResultsRight(this.type, final);
         if (this.type == "match" && this.result !== undefined && this.result.length == 10) {
@@ -102,4 +105,4 @@ class Location {
         }
     }
 }
-exports.Location = Location;
+module.exports.Location = Location;

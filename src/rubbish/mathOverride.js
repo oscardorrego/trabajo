@@ -15,6 +15,9 @@ class myMath {
     static averageNegativeOnlyOdd (values) {
         return Array.isArray(values) ? values.reduce((ac, cv) => ac + (cv <= 0 ? cv : 0), 0) / values.filter((el, index) => { return index % 2 != 0 && el <= 0 }).length : null;
     }
+    static whoIsBigger(first, second) {
+        return first > second ? 1 : first < second ? -1 : 0;
+    }
 }
 
-module.exports = myMath;
+module.exports.myMath = myMath;
