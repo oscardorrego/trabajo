@@ -53,7 +53,11 @@ class Location {
         }
     }
     static areRightFormatGoals(final) {
-        return final.length >= 2 && final.length % 2 == 0 && final.filter((el, index) => { index % 2 == 0 && el >= 0 }).length == final.filter((el, index) => { index % 2 != 0 && el <= 0 }).length;
+        return final.length >= 2
+            && final.length % 2 == 0
+            && final.filter((el, index) => { return index % 2 == 0 && el >= 0 }).length > 0
+            && final.filter((el, index) => { return index % 2 != 0 && el <= 0 }).length > 0
+            && final.filter((el, index) => { return index % 2 == 0 && el >= 0 }).length == final.filter((el, index) => { return index % 2 != 0 && el <= 0 }).length;
     }
     //Comprueba que todos los datos son correctos
     static areResultsRight(type, result) {
