@@ -7,7 +7,7 @@ class Location {
     constructor(type, where, result) {
         this.type = ['match', 'goal'].includes(type) ? type : 'match';
         this.where = ['local', 'away'].includes(where) ? where : 'local';
-        this.result = Location.areResultsRight(result);
+        this.result = Location.areResultsRight(this.type, result); //Default undefined
     }
     get getwhere() {
         return this.where;
@@ -32,22 +32,22 @@ class Location {
         } : null;
     }
     get getSumPositive() {
-        return this.type == 'goal' && this.result !== undefined ? this.result.reduce((ac, cv) => ac + (cv >= 0 ? cv : 0))  : null;
+        return this.type == 'goal' && this.result !== undefined ? this.result.reduce((ac, cv) => ac + (cv >= 0 ? cv : 0), 0)  : null;
     }
     get getSumNegative() {
-        return this.type == 'goal' && this.result !== undefined ? this.result.reduce((ac, cv) => ac + (cv <= 0 ? cv : 0))  : null;
+        return this.type == 'goal' && this.result !== undefined ? this.result.reduce((ac, cv) => ac + (cv <= 0 ? cv : 0), 0)  : null;
     }
     get allSum() {
         return  this.type == 'goal' && this.result !== undefined ? {
-            "positive": this.result.reduce((ac, cv) => ac + (cv >= 0 ? cv : 0)),
-            "negative": this.result.reduce((ac, cv) => ac + (cv <= 0 ? cv : 0))
+            "positive": this.result.reduce((ac, cv) => ac + (cv >= 0 ? cv : 0), 0),
+            "negative": this.result.reduce((ac, cv) => ac + (cv <= 0 ? cv : 0), 0)
         } : null;
     }
     addvalue(final) {
-        this.result = this.result !== undefined ? this.result.concat(Location.areResultsRight(final)) : Location.areResultsRight(final);
+        this.result = this.result != undefined ? this.result.concat(Location.areResultsRight(this.type, final)) : Location.areResultsRight(this.type, final);
         if (this.type == "match" && this.result !== undefined && this.result.length == 10) {
             this.result.shift();
-        } else if(this.type == "match" && this.result !== undefined && this.result.length == 20) {
+        } else if(this.type == "goal" && this.result !== undefined && this.result.length == 20) {
             this.result.shift();
             this.result.shift();
         }
@@ -56,26 +56,26 @@ class Location {
         return final.length >= 2 && final.length % 2 == 0 && final.filter((el, index) => { index % 2 == 0 && el >= 0 }).length == final.filter((el, index) => { index % 2 != 0 && el <= 0 }).length;
     }
     //Comprueba que todos los datos son correctos
-    static areResultsRight(result) {
+    static areResultsRight(type, result) {
         let regex = this.type == "match" ? new RegExp("^\-?[0-1]$") : new RegExp("^\-?[0-9]{1,2}$");
-        if (this.type == "match") {
+        if (type == "match") {
             return  Array.isArray(result) ?
                         Array.from(result.every((any) => {
                             return regex.test(any);
-                        }) ?
-                            result :
-                                result.length <= 10 ?
-                                    result : result.slice(result.length - 10, result.length)) //Finish first condition
-                    : [-1, 0, 1].includes(result) ?
-                        [result]
-                            : new Array(0); // +1, 0, -1
-        } else if(this.type == "goal") {
+                        }) ? result.length <= 10 ? 
+                                result : 
+                                result.slice(result.length - 10, result.length)
+                            : new Array(0))
+                        : [-1, 0, 1].includes(result) ?
+                            [result]
+                                : new Array(0); // +1, 0, -1
+        } else if(type == "goal") {
             return  Array.isArray(result) ?
                         Array.from(result.every((any) => {
                             return regex.test(any);
                         }) && Location.areRightFormatGoals(result) ?
                             result : new Array(0))
-                    : new Array(0); // +1, 0, -1
+                    : new Array(0);
         }
     }
 }
