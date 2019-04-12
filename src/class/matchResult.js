@@ -28,10 +28,10 @@ class MatchResult {
         return this.away;
     }
     get toStringLocal() {
-        return `${this.getLocal.getWon},${this.getLocal.getLost},${this.getLocal.getTied}`;
+        return `${this.getLocal.getWon},${this.getLocal.getTied},${this.getLocal.getLost}`;
     }
-    get toStringLocal() {
-        return `${this.getAway.getWon},${this.getAway.getLost},${this.getAway.getTied}`;
+    get toStringAway() {
+        return `${this.getAway.getWon},${this.getAway.getTied},${this.getAway.getLost}`;
     }
     get toStringLocalStreak() {
         return `${this.getLocal.getWinningStreak},${this.getLocal.getTiedWinningStreak}`;

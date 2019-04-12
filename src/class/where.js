@@ -34,10 +34,10 @@ class Location {
         } : null;
     }
     get getWinningStreak() {
-        return this.type == 'match' && this.result !== undefined ? this.result.slice(Math.max(this.lastIndexOf(0), this.lastIndexOf(-1)) > -1 ? Math.max(this.lastIndexOf(0), this.lastIndexOf(-1)) : 0, this.length).reduce((ac, cv) => ac + cv, 0) : null;
+        return this.type == 'match' && this.result !== undefined && this.result.length > 1 ? this.result.length - (Math.max(this.result.lastIndexOf(0), this.result.lastIndexOf(-1)) > -1 ? Math.max(this.result.lastIndexOf(0), this.result.lastIndexOf(-1)) : 0) : this.result[0] !== undefined && this.result[0] != -1 ? this.result[0] : 0;
     }
     get getTiedWinningStreak() {
-        return this.type == 'match' && this.result !== undefined ? this.result.slice(this.lastIndexOf(-1) > -1 ? this.lastIndexOf(-1) : 0, this.length).reduce((ac, cv) => ac + cv, 0) : null;
+        return this.type == 'match' && this.result !== undefined && this.result.length > 1 ? this.result.length - (this.result.lastIndexOf(-1) > -1 ? this.result.lastIndexOf(-1) : 0) : this.result[0] !== undefined && this.result[0] != -1 ? this.result[0] : 0;
     }
     //Goals start: 
     get getSumPositive() {
@@ -53,10 +53,10 @@ class Location {
         } : null;
     }
     get getAveragePositive() {
-        return  this.type == 'goal' && this.result !== undefined ? myMath.averagePositiveOnlyEven(this.result) : null
+        return  this.type == 'goal' && this.result !== undefined ? myMath.myMath.averagePositiveOnlyEven(this.result) : null
     }
     get getAverageNegative() {
-        return  this.type == 'goal' && this.result !== undefined ? myMath.averageNegativeOnlyOdd(this.result) : null
+        return  this.type == 'goal' && this.result !== undefined ? myMath.myMath.averageNegativeOnlyOdd(this.result) : null
     }
     get allAverage() {
         return  this.type == 'goal' && this.result !== undefined ? {

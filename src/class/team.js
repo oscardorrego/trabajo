@@ -1,5 +1,5 @@
 const matchResult = require("./matchResult");
-const goal = require("./goals");
+const goaal = require("./goals");
 
 //import { ResultMatch } from "./Matches";
 
@@ -8,30 +8,18 @@ class Team {
         this.name = name;
         this.div = div;
         this.match = match == null ? new matchResult.MatchResult(2, 2) : match;
-        this.goal = goal == null ? new goal.Goal(1, 1) : goal;
+        this.goal = goal == null ? new goaal.Goal(1, 1) : goal;
     }
-    set name(name) {
-        this.mame = name;
-    }
-    set div(div) {
-        this.div = div;
-    }
-    set match(match) {
-        this.match = match;
-    }
-    set goal(goal) {
-        this.goal = goal;
-    }
-    get name() {
+    get getname() {
         return this.name;
     }
-    get div() {
+    get getdiv() {
         return this.div;
     }
-    get match() {
+    get getmatch() {
         return this.match;
     }
-    get goal() {
+    get getgoal() {
         return this.goal;
     }
     setPropertiesLocal(matchResult, goals) {
