@@ -27,6 +27,7 @@ class MatchResult {
     get getAway() {
         return this.away;
     }
+    //No index
     get toStringLocal() {
         return `${this.getLocal.getWon},${this.getLocal.getTied},${this.getLocal.getLost}`;
     }
@@ -38,6 +39,19 @@ class MatchResult {
     }
     get toStringAwayStreak() {
         return `${this.getAway.getWinningStreak},${this.getAway.getTiedWinningStreak}`;
+    }
+    //Index
+    toStringLocalIndex(from = 0, to = -1) {
+        return `${this.getLocal.getWonIndex(from, to)},${this.getLocal.getTiedIndex(from, to)},${this.getLocal.getLostIndex(from, to)}`;
+    }
+    toStringAwayIndex(from = 0, to = -1) {
+        return `${this.getAway.getWonIndex(from, to)},${this.getAway.getTiedIndex(from, to)},${this.getAway.getLostIndex(from, to)}`;
+    }
+    toStringLocalStreakIndex(from = 0, to = -1) {
+        return `${this.getLocal.getWinningStreakIndex(from, to)},${this.getLocal.getTiedWinningStreakIndex(from, to)}`;
+    }
+    toStringAwayStreakIndex(from = 0, to = -1) {
+        return `${this.getAway.getWinningStreakIndex(from, to)},${this.getAway.getTiedWinningStreakIndex(from, to)}`;
     }
 }
 

@@ -87,7 +87,7 @@ rl.on('line', (line) => {
         }
         appendInAFile(lineParsed[0], 
                 //Division         Date             LocalTeam           AwayTeam      localGoals        AwayGoals           winnings/tieds/loses   local                    winnings/tieds/loses aways                              winingStreak/tied local                        winingStreak/tied away                                             localgoals/-goals                             Away goals/-goals
-                `${lineParsed[0]},${lineParsed[1]},${lineParsed[2]},${lineParsed[3]},${lineParsed[4]},${lineParsed[5]},${allTeams[lineParsed[2]].match.toStringLocal},${allTeams[lineParsed[3]].match.toStringAway},${allTeams[lineParsed[2]].match.toStringLocalStreak},${allTeams[lineParsed[3]].match.toStringAwayStreak},${allTeams[lineParsed[2]].goal.toStringLocalTotal},${allTeams[lineParsed[3]].goal.toStringAwayTotal},${allTeams[lineParsed[2]].goal.toStringLocalAverage},${allTeams[lineParsed[3]].goal.toStringAwayAverage};\n`
+                `${lineParsed[0]},${lineParsed[1]},${lineParsed[2]},${lineParsed[3]},${lineParsed[4]},${lineParsed[5]},${allTeams[lineParsed[2]].match.toStringLocalIndex()},${allTeams[lineParsed[3]].match.toStringAwayIndex()},${allTeams[lineParsed[2]].match.toStringLocalStreakIndex()},${allTeams[lineParsed[3]].match.toStringAwayStreakIndex()},${allTeams[lineParsed[2]].goal.toStringLocalTotal},${allTeams[lineParsed[3]].goal.toStringAwayTotal},${allTeams[lineParsed[2]].goal.toStringLocalAverage},${allTeams[lineParsed[3]].goal.toStringAwayAverage};\n`
         );
     }
 });

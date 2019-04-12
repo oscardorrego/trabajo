@@ -1,9 +1,9 @@
 const myMath = require("../rubbish/mathOverride");
 class Location {
     /**
-     * @param {String} type          => Type refers to if it is a match or a goal
-     * @param {String} where         => local|away representando donde juega un equipo (local visitante)
-     * @param {Array|Integer} result => se le puede pasar un array de resultados (sabiendo que admite un límite de 10, en caso de más solamente coge los 10 últimos) o un resultado solamente.
+     * @param {String} type          -> Type refers to if it is a match or a goal
+     * @param {String} where         -> local|away representando donde juega un equipo (local visitante)
+     * @param {Array|Integer} result -> se le puede pasar un array de resultados (sabiendo que admite un límite de 10, en caso de más solamente coge los 10 últimos) o un resultado solamente.
      */
     constructor(type, where, result) {
         this.type = ['match', 'goal'].includes(type) ? type : 'match';
@@ -17,15 +17,70 @@ class Location {
         return this.result;
     }
     //Matches Start:
+    /**
+     * @returns {Integer} -> return all matches won by the [local|match] team or null
+     */
     get getWon() {
         return this.type == 'match' && this.result !== undefined ? this.result.filter((el) =>  el == 1).length : null;
     }
+    /**
+     * 
+     * @param {Integer} from      -> Optional param to specifie the first index of the arr results. Default: 0 (first)
+     * @param {Integer} to        -> Optional param to specife the last index of the arr results. Default: -1 (previous to the last)
+     * @param {Integer} minLength -> Optional param to specifie min length of the array to parse. Deafult: 11
+     * @returns {Integer}         -> return all matches won by the [local|match] team or null in an interval.
+     */
+    getWonIndex(from = 0, to = -1, minLength = 11) {
+        console.log(this.result.slice(from, to));
+        return  this.type == 'match' 
+            &&  this.result !== undefined
+            &&  this.result.length == minLength ? 
+                    this.result.slice(from, to).filter((el) =>  el == 1).length
+                  : null;
+    }
+    /**
+     * @returns {Integer} -> return all matches lost by the [local|match] team or null
+     */
     get getLost() {
         return this.type == 'match' && this.result !== undefined ? this.result.filter((el) =>  el == -1).length : null;
     }
+    /**
+     * 
+     * @param {Integer} from      -> Optional param to specifie the first index of the arr results. Default: 0 (first)
+     * @param {Integer} to        -> Optional param to specife the last index of the arr results. Default: -1 (previous to the last)
+     * @param {Integer} minLength -> Optional param to specifie min length of the array to parse. Default: 11
+     * @returns {Integer}         -> return all matches lost by the [local|match] team or null in an interval.
+     */
+    getLostIndex(from = 0, to = -1, minLength = 11) {
+        return  this.type == 'match' 
+            &&  this.result !== undefined
+            &&  this.result.length == minLength ? 
+                    this.result.slice(from, to).filter((el) =>  el == -1).length
+                  : null;
+    }
+    /**
+     * @returns {Integer} -> return all matches tied by the [local|match] team or null
+     */
     get getTied() {
         return this.type == 'match' && this.result !== undefined ? this.result.filter((el) =>  el == 0).length : null;
     }
+    /**
+     * 
+     * @param {Integer} from      -> Optional param to specifie the first index of the arr results. Default: 0 (first)
+     * @param {Integer} to        -> Optional param to specife the last index of the arr results. Default: -1 (previous to the last)
+     * @param {Integer} minLength -> Optional param to specifie min length of the array to parse. Default: 11
+     * @returns {Integer}         -> return all matches tied by the [local|match] team or null in an interval.
+     */
+    getTiedIndex(from = 0, to = -1, minLength = 11) {
+        return  this.type == 'match' 
+            &&  this.result !== undefined
+            &&  this.result.length == minLength ? 
+                    this.result.slice(from, to).filter((el) =>  el == 0).length
+                  : null;
+    }
+    /**
+     * @returns {Integer} -> return all matches { won, lost, tied } by the [local|match] team or null
+     */
     get getAllSorted() {
         return this.type == 'match' && this.result !== undefined ? {
             "won": this.result.filter((el) =>  el == 1).length,
@@ -33,11 +88,58 @@ class Location {
             "tied": this.result.filter((el) =>  el == 0).length
         } : null;
     }
+    /**
+     * @returns {Integer} -> return the winning streak of the [local|match] team or null.
+     */
     get getWinningStreak() {
         return this.type == 'match' && this.result !== undefined && this.result.length > 1 ? this.result.length - (Math.max(this.result.lastIndexOf(0), this.result.lastIndexOf(-1)) > -1 ? Math.max(this.result.lastIndexOf(0), this.result.lastIndexOf(-1)) : 0) : this.result[0] !== undefined && this.result[0] != -1 ? this.result[0] : 0;
     }
+    /**
+     * 
+     * @param {Integer} from -> Optional param to specifie the first index of the arr results. Default: 0 (first)
+     * @param {Integer} to   -> Optional param to specife the last index of the arr results. Default: -1 (previous to the last)
+     * @returns {Integer}    -> return the winning streak of the [local|match] team or null.
+     */
+    getWinningStreakIndex(from = 0, to = -1) {
+        let resultLocalScope = this.result !== undefined ? this.result.slice(from, to) : undefined;
+        return this.type == 'match'
+            && resultLocalScope !== undefined 
+            && resultLocalScope.length >= 1 ? 
+                    resultLocalScope.length - (Math.max(resultLocalScope.lastIndexOf(0), resultLocalScope.lastIndexOf(-1)) > -1 ?
+                        Math.max(resultLocalScope.lastIndexOf(0), resultLocalScope.lastIndexOf(-1))
+                        : 0) 
+                    : null;
+    }
+    /**
+     * @returns {Integer} -> return the tied streak of the [local|match] team or null.
+     */
     get getTiedWinningStreak() {
-        return this.type == 'match' && this.result !== undefined && this.result.length > 1 ? this.result.length - (this.result.lastIndexOf(-1) > -1 ? this.result.lastIndexOf(-1) : 0) : this.result[0] !== undefined && this.result[0] != -1 ? this.result[0] : 0;
+        return this.type == 'match'
+            && this.result !== undefined 
+            && this.result.length > 1 ? 
+                this.result.length - (this.result.lastIndexOf(-1) > -1 ? 
+                    this.result.lastIndexOf(-1) 
+                    : 0) 
+                :  this.result[0] !== undefined 
+                && this.result[0] != -1 
+                    ? this.result[0] 
+                    : null;
+    }
+    /**
+     * 
+     * @param {Integer} from -> Optional param to specifie the first index of the arr results. Default: 0 (first)
+     * @param {Integer} to   -> Optional param to specife the last index of the arr results. Default: -1 (previous to the last)
+     * @returns {Integer}    -> return the tied streak of the [local|match] team or null.
+     */
+    getTiedWinningStreakIndex(from = 0, to = -1) {
+        let resultLocalScope = this.result !== undefined ? this.result.slice(from, to) : undefined;
+        return this.type == 'match'
+            && resultLocalScope !== undefined 
+            && resultLocalScope.length >= 1 ? 
+                    resultLocalScope.length - (Math.max(resultLocalScope.lastIndexOf(0), resultLocalScope.lastIndexOf(-1)) > -1 ?
+                        Math.max(resultLocalScope.lastIndexOf(0), resultLocalScope.lastIndexOf(-1))
+                        : 0) 
+                    : null;
     }
     //Goals start: 
     get getSumPositive() {
