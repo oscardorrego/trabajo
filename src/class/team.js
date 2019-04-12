@@ -32,5 +32,4 @@ class Team {
     }
 }
 
-
 module.exports.Team = Team;
