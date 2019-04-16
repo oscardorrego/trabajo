@@ -18,23 +18,34 @@ function createDorF {
     esac
 }
 
+# 1 -> Name of the dir
+# 2 -> name of the league()
+# 3 -> year from
+# 4 -> year to
+# 5 -> extension file
+# 6 -> path to request
 function createEnviroment {
     path=$6
+    echo $path
     createDorF -d $1 && cd $1
-    for((i=$3;i<$4;i++)); do
-        nameFile="$2$i$(($i + 1)).$5"
+    createDorF -d $2 && cd $2
+    for((j=$3;j<$4;j++)); do
+        nameFile="$2_$i_$(($j + 1)).$5"
+        echo $nameFile
         createDorF -f $nameFile 
-        curl --request GET -sL --user-agent 'Shellman' --url "$path$nameFile" > $nameFile
+        curl --request GET -sL --user-agent 'Shellman' --url "$path/$j$(($j + 1))/$2.$5" > $nameFile
     done
+    cd ../../
 }
+
+#createDorF -d leagues && cd leagues
 
 cat "$filepath" | sed -e '/#/d' | while read -r line || [[ -n "$line" ]]; do
     IFS=';'
     read -ra PARAMS <<< "$line"
-    if [ $count = 0 ]; then path=PARAMS[0]; else 
-        createEnviroment $PARAMS[0] $PARAMS[1] 10 19 csv
-        for item in "${PARAMS[@]}";do
-            
+    if [ $count = 0 ]; then path=${PARAMS[0]}; else 
+        for((i=0;i<${#PARAMS[@]};i++)); do
+            if [ $i != 0 ]; then createEnviroment ${PARAMS[0]} ${PARAMS[$i]} 10 19 csv $path; fi
         done
     fi
     count=$(($count+1))
